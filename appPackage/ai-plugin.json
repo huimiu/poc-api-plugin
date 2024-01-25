@@ -1,0 +1,60 @@
+{
+  "schema_version": "v2",
+  "name_for_human": "Repair Search Plugin",
+  "name_for_model": "todo",
+  "description_for_human": "Track your repair records",
+  "description_for_model": "Plugin for searching a repair list, you can search by who's assigned to the repair.",
+  "logo_url": "outline.png",
+  "legal_info_url": "https://example.com/legal",
+  "auth": {
+    "type": "none"
+  },
+  "api": {
+    "type": "openapi",
+    "url": "todoOpenApiSpec.yaml"
+  },
+ 
+  "renderingTemplates": {
+    "getTodos": {
+      "template_url": "./responseTemplates/getTodosTemplate.json",
+      "operationId": "getTodos",
+      "renderingRoot": "todos",
+      "path": "/todos"
+    }
+  },
+  "interactiveCommands": [
+    {
+      "id": "createTodo",
+      "type": "action",
+      "title": "Create TODO",
+      "description": "Create a new TODO item",
+      "initialRun": false,
+      "context": ["commandBox", "compose"],
+      "appliesTo": ["createTodoFunction"],
+      "inputTemplate": "./responseTemplates/createTodoTemplate.json"
+    }
+  ],
+  "functions": [
+    {
+      "name": "createTodoFunction",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "The title of the TODO item."
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the TODO item."
+          },
+          "dueDate": {
+            "type": "string",
+            "description": "The due date for the TODO item."
+          }
+        },
+        "required": ["title"]
+      }
+    }
+  ]
+}
