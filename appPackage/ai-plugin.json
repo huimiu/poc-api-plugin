@@ -1,92 +1,42 @@
 {
   "schema_version": "v2",
   "name_for_human": "Repair Search Plugin",
-  "name_for_model": "todo",
   "description_for_human": "Track your repair records",
   "description_for_model": "Plugin for searching a repair list, you can search by who's assigned to the repair.",
-  "runtimes": [
-    {
-      "type": "openapi",
-      "auth": {
-        "type": "none"
-      },
-      "spec": {
-        "url": "apiSpecificationFile/repair.yaml"
-      }
-    }
-  ],
   "functions": [
     {
       "name": "repair",
       "description": "Search for repairs",
-      "capabilities": {
-        "rendering_templates": {
-          "type": "adaptiveCard",
-          "json_path": "$.results",
-          "detail_card_template": {
-            "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
-            "type": "AdaptiveCard",
-            "version": "1.5",
-            "body": [
-              {
-                "type": "Container",
-                "items": [
-                  {
-                    "type": "ColumnSet",
-                    "columns": [
-                      {
-                        "type": "Column",
-                        "width": "stretch",
-                        "items": [
-                          {
-                            "type": "TextBlock",
-                            "text": "Title: ${if(title, title, 'N/A')}",
-                            "wrap": true
-                          },
-                          {
-                            "type": "TextBlock",
-                            "text": "Description: ${if(description, description, 'N/A')}",
-                            "wrap": true
-                          },
-                          {
-                            "type": "TextBlock",
-                            "text": "Assigned To: ${if(assignedTo, assignedTo, 'N/A')}",
-                            "wrap": true
-                          }
-                        ]
-                      },
-                      {
-                        "type": "Column",
-                        "width": "auto",
-                        "items": [
-                          {
-                            "type": "Image",
-                            "url": "${if(image, image, '')}",
-                            "size": "Medium"
-                          }
-                        ]
-                      }
-                    ]
-                  },
-                  {
-                    "type": "FactSet",
-                    "facts": [
-                      {
-                        "title": "Repair ID:",
-                        "value": "${if(id, id, 'N/A')}"
-                      },
-                      {
-                        "title": "Date:",
-                        "value": "${if(date, date, 'N/A')}"
-                      }
-                    ]
-                  }
-                ]
-              }
-            ]
+      "parameters": {
+        "type": "string",
+        "description": "The person assigned to the repair"        
+      },
+      "states": {
+          "reasoning": {
+              "description": "Returns the repair records.",
+              "instructions": [
+                "Here are the parameters:",
+                "  assignedTo: The person assigned to the repair"
+              ]
+          },
+          "responding": {
+              "description": "Returns the repair result in JSON format.",
+              "instructions": "Extract and include as much relevant information as possible from the JSON result to meet the user's needs."
           }
-        }
       }
+    }    
+  ],
+  "runtimes": [
+    {
+      "type": "OpenApi",
+      "auth": {
+        "type": "none"
+      },
+      "spec": {
+        "url": "apiSpecificationFile/repair.yaml",
+        "progress_style": "ShowUsageWithInputAndOutput"
+      },
+      "run_for_functions": ["repair"]
     }
   ]
 }
