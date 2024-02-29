@@ -8,15 +8,23 @@
       "name": "repair",
       "description": "Search for repairs",
       "parameters": {
-        "type": "string",
-        "description": "The person assigned to the repair"        
+        "type": "object",
+        "properties": {
+          "assignedTo": {
+            "type": "string",
+            "description": "The person assigned to the repair"
+          }
+        },
+        "required": [
+          "assignedTo"
+      ]
       },
       "states": {
           "reasoning": {
               "description": "Returns the repair records.",
               "instructions": [
                 "Here are the parameters:",
-                "  assignedTo: The person assigned to the repair"
+                "  assignedTo: The person assigned to the repair."
               ]
           },
           "responding": {
